@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hiveminds Exit Feedback Dashboard – JAS '26</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f7fb;--card:#fff;--text:#1d2433;--muted:#667085;--line:#e6e8ef;--accent:#4f46e5;--good:#16a34a;--warn:#f59e0b;--bad:#dc2626;--track:#eef0f6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f131c;--card:#181d2a;--text:#eef1f7;--muted:#9aa4b8;--line:#272e40;--accent:#818cf8;--good:#4ade80;--warn:#fbbf24;--bad:#f87171;--track:#242b3d}}
+:root[data-theme="dark"]{--bg:#0f131c;--card:#181d2a;--text:#eef1f7;--muted:#9aa4b8;--line:#272e40;--accent:#818cf8;--good:#4ade80;--warn:#fbbf24;--bad:#f87171;--track:#242b3d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.4}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 40px}
+h1{font-size:26px;margin:0}.sub{color:var(--muted);margin:4px 0 20px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.kpi .n{font-size:34px;font-weight:700}.kpi .l{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;margin-bottom:12px}
+h2{font-size:15px;margin:0 0 2px}.hint{font-size:12px;color:var(--muted);margin:0 0 12px}
+.row{display:grid;grid-template-columns:minmax(110px,42%) 1fr 44px;gap:8px;align-items:center;margin:7px 0;font-size:13px}
+.track{background:var(--track);border-radius:6px;height:14px;overflow:hidden}
+.fill{height:100%;border-radius:6px;background:var(--accent)}
+.val{text-align:right;font-weight:600}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:12px}
+.two .card{border-top:4px solid var(--good)}.two .card.w{border-top-color:var(--warn)}
+.two ul{list-style:none;margin:10px 0 0;padding:0}.two li{margin:9px 0;font-size:15px;font-weight:500}
+.foot{color:var(--muted);font-size:12px;margin-top:14px}
+</style></head><body><div class="wrap">
+<h1>Employee Exit Feedback</h1>
+<p class="sub">Hiveminds · JAS '26 · Based on 98 exit form responses</p>
+
+<div class="kpis">
+ <div class="card kpi"><div class="n">98</div><div class="l">Exit forms received</div></div>
+ <div class="card kpi"><div class="n" style="color:var(--warn)">40%</div><div class="l">Left within their first year</div></div>
+ <div class="card kpi"><div class="n" style="color:var(--good)">76%</div><div class="l">Rated their journey Good or Amazing</div></div>
+ <div class="card kpi"><div class="n" style="color:var(--good)">67%</div><div class="l">Would recommend us to a friend</div></div>
+ <div class="card kpi"><div class="n" style="color:var(--good)">91%</div><div class="l">Open to rejoining (Yes / Maybe)</div></div>
+</div>
+
+<div class="two">
+ <div class="card">
+  <h2>✅ What went well</h2>
+  <ul>
+   <li>76% had a Good or Amazing journey</li>
+   <li>91% are open to rejoining</li>
+   <li>Learning &amp; development loved most</li>
+   <li>Team collaboration rated highest</li>
+  </ul>
+ </div>
+ <div class="card w">
+  <h2>⚠️ Watch-outs to address</h2>
+  <ul>
+   <li>40% leave within the first year</li>
+   <li>Work-life balance scores lowest (2.6/5)</li>
+   <li>Many don't feel valued (2.7/5)</li>
+   <li>Retail &amp; Mumbai are hit hardest</li>
+  </ul>
+ </div>
+</div>
+
+<div class="grid">
+ <div class="card"><h2>Why people chose to leave</h2><p class="hint">Number of people selecting each reason (multiple allowed)</p><div id="reasons"></div></div>
+ <div class="card"><h2>How they rate their experience</h2><p class="hint">Average score out of 5 – lowest first</p><div id="ratings"></div></div>
+</div>
+<div class="grid">
+ <div class="card"><h2>When do people leave?</h2><p class="hint">Exits by time spent at Hiveminds</p><div id="tenure"></div></div>
+ <div class="card"><h2>Where are exits coming from?</h2><p class="hint">Exits by department</p><div id="dept"></div></div>
+</div>
+<div class="grid">
+ <div class="card"><h2>What they enjoyed most</h2><p class="hint">Top 5 aspects (multiple allowed)</p><div id="enjoy"></div></div>
+ <div class="card"><h2>Overall journey</h2><p class="hint">How leavers describe their time here</p><div id="journey"></div></div>
+</div>
+<p class="foot">Note: one blank form excluded. Departments outside the top four are grouped as "Others". Small groups should be read as indicative only.</p>
+</div>
+<script>
+function bars(id,data,max,opts){opts=opts||{};var h='';
+ data.forEach(function(d){var c=d[2]||opts.color||'var(--accent)';
+  h+='<div class="row"><div>'+d[0]+'</div><div class="track"><div class="fill" style="width:'+(d[1]/max*100)+'%;background:'+c+'"></div></div><div class="val">'+d[1]+(opts.sfx||'')+'</div></div>'});
+ document.getElementById(id).innerHTML=h}
+bars('reasons',[['Personal (health / family / relocation)',58],['Better opportunity elsewhere',22],['Career progression / role clarity',15],['Flexibility (remote / hybrid)',14],['Compensation &amp; appraisal',13],['Team / manager / leadership',13],['Workload / work-life balance',11],['Lack of recognition',9]],58);
+function rc(v){return v<2.8?'var(--bad)':v<3.2?'var(--warn)':'var(--good)'}
+var r=[['Work-life balance',2.57],['Feeling appreciated &amp; valued',2.74],['Communication &amp; transparency',2.89],['Culture &amp; inclusiveness',3.07],['Clarity of responsibilities',3.14],['Support from People &amp; Culture',3.15],['Relationship with manager',3.21],['Learning &amp; growth',3.29],['Team collaboration',3.40]].map(function(x){return [x[0],x[1],rc(x[1])]});
+bars('ratings',r,5);
+bars('tenure',[['0–3 months',18,'var(--warn)'],['3–6 months',11,'var(--warn)'],['7–12 months',10,'var(--warn)'],['1–2 years',34],['2–3 years',11],['3–5 years',13],['5+ years',1]],34);
+bars('dept',[['Retail',37],['Performance Marketing',23],['Branding',14],['SEO',13],['Others',11]],37);
+bars('enjoy',[['Learning &amp; development',70],['People &amp; peer culture',48],['Supportive manager',46],['Culture &amp; vibe',44],['Engagement activities',38]],70,{color:'var(--good)'});
+bars('journey',[['⭐ Amazing',43,'var(--good)'],['👍 Good',31,'var(--good)'],['😐 Mixed',18,'var(--warn)'],['🙁 Could have been better',6,'var(--bad)']],43);
+</script></body></html>
